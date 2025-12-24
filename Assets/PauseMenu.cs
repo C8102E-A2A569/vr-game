@@ -4,73 +4,197 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pauseMenuUI;
-    public Slider volumeSlider;
-    public PlayerFirstPerson PlayerFirstPerson; // ссылка на скрипт игрока
+    [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private PlayerFirstPerson PlayerFirstPerson;
+    [SerializeField] private FootstepOnMove footstepOnMove;
+    [SerializeField] private GameObject xrDeviceSimulatorRoot;
+    [SerializeField] private bool useTimeScalePause = false;
+    [SerializeField] private float pausedTimeScale = 0f;
+    [SerializeField] private float resumeTimeScale = 1f;
 
-    private bool isPaused = false;
+    private bool isPaused;
 
-    void Start()
+    private void Start()
     {
         if (pauseMenuUI != null)
+        {
             pauseMenuUI.SetActive(false);
+        }
 
         if (volumeSlider != null)
+        {
             volumeSlider.value = AudioListener.volume;
-
-        if (volumeSlider != null)
             volumeSlider.onValueChanged.AddListener(SetVolume);
+        }
+
+        ResolveMovementReferences();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
+            {
                 Resume();
+            }
             else
+            {
                 Pause();
+            }
         }
     }
 
     public void Pause()
     {
-        pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f; // Пауза игры
+        if (pauseMenuUI != null)
+        {
+            pauseMenuUI.SetActive(true);
+        }
 
-        // Отключаем управление игроком
-        if (PlayerFirstPerson != null)
-            PlayerFirstPerson.SetControlEnabled(false);
-
+        if (useTimeScalePause)
+        {
+            Time.timeScale = pausedTimeScale;
+        }
+        SetMovementEnabled(false);
+        SetDeviceSimulatorEnabled(false);
+        Physics.SyncTransforms();
+        AudioListener.pause = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         isPaused = true;
     }
 
     public void Resume()
     {
-        pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f; // Возобновить игру
+        if (pauseMenuUI != null)
+        {
+            pauseMenuUI.SetActive(false);
+        }
 
-        // Включаем управление игроком
-        if (PlayerFirstPerson != null)
-            PlayerFirstPerson.SetControlEnabled(true);
-
+        if (useTimeScalePause)
+        {
+            Time.timeScale = resumeTimeScale;
+        }
+        Physics.SyncTransforms();
+        SetMovementEnabled(true);
+        SetDeviceSimulatorEnabled(true);
+        AudioListener.pause = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         isPaused = false;
+        StartCoroutine(EnsureCursorLock());
     }
 
     public void QuitToMainMenu()
     {
-        Time.timeScale = 1f;
+        if (useTimeScalePause)
+        {
+            Time.timeScale = resumeTimeScale;
+        }
+        AudioListener.pause = false;
         SceneManager.LoadScene("MainMenu");
     }
 
     public void SetVolume(float volume)
     {
         AudioListener.volume = volume;
+    }
+
+    private void ResolveMovementReferences()
+    {
+        if (PlayerFirstPerson == null)
+        {
+            PlayerFirstPerson[] players = FindObjectsOfType<PlayerFirstPerson>(true);
+            if (players.Length > 0)
+            {
+                PlayerFirstPerson = players[0];
+            }
+        }
+
+        if (footstepOnMove == null)
+        {
+            FootstepOnMove[] footsteps = FindObjectsOfType<FootstepOnMove>(true);
+            if (footsteps.Length > 0)
+            {
+                footstepOnMove = footsteps[0];
+            }
+        }
+
+        if (xrDeviceSimulatorRoot == null)
+        {
+            xrDeviceSimulatorRoot = GameObject.Find("XR Device Simulator");
+        }
+    }
+
+    private void SetMovementEnabled(bool enabled)
+    {
+        ResolveMovementReferences();
+
+        PlayerFirstPerson[] players = FindObjectsOfType<PlayerFirstPerson>(true);
+        for (int i = 0; i < players.Length; i++)
+        {
+            PlayerFirstPerson player = players[i];
+            if (player == null)
+            {
+                continue;
+            }
+
+            player.SetControlEnabled(enabled);
+            player.enabled = enabled;
+
+            CharacterController controller = player.GetComponent<CharacterController>();
+            if (controller != null)
+            {
+                controller.enabled = enabled;
+            }
+        }
+
+        FootstepOnMove[] footsteps = FindObjectsOfType<FootstepOnMove>(true);
+        for (int i = 0; i < footsteps.Length; i++)
+        {
+            FootstepOnMove step = footsteps[i];
+            if (step != null)
+            {
+                step.enabled = enabled;
+            }
+        }
+    }
+
+    private void SetDeviceSimulatorEnabled(bool enabled)
+    {
+        if (xrDeviceSimulatorRoot == null)
+        {
+            xrDeviceSimulatorRoot = GameObject.Find("XR Device Simulator");
+        }
+
+        MonoBehaviour[] behaviours = xrDeviceSimulatorRoot != null
+            ? xrDeviceSimulatorRoot.GetComponentsInChildren<MonoBehaviour>(true)
+            : FindObjectsOfType<MonoBehaviour>(true);
+
+        for (int i = 0; i < behaviours.Length; i++)
+        {
+            MonoBehaviour behaviour = behaviours[i];
+            if (behaviour == null)
+            {
+                continue;
+            }
+
+            if (behaviour.GetType().Name == "XRDeviceSimulator")
+            {
+                behaviour.enabled = enabled;
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator EnsureCursorLock()
+    {
+        yield return null;
+        if (!isPaused)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }

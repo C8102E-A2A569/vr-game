@@ -7,6 +7,9 @@ public class CoinTableExitOpener : MonoBehaviour
     [SerializeField] private Collider tableBounds;
     [SerializeField] private Transform safeDoor;
     [SerializeField] private Animator safeAnimator;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private float openVolume = 1f;
 
     [Header("Door Rotation")]
     [SerializeField] private Vector3 openAxis = Vector3.up;
@@ -22,6 +25,15 @@ public class CoinTableExitOpener : MonoBehaviour
         if (safeDoor != null)
         {
             doorClosedRotation = safeDoor.localRotation;
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         }
     }
 
@@ -76,6 +88,11 @@ public class CoinTableExitOpener : MonoBehaviour
     private void OpenSafeDoor()
     {
         hasOpened = true;
+
+        if (audioSource != null && openSound != null)
+        {
+            audioSource.PlayOneShot(openSound, openVolume);
+        }
 
         if (safeAnimator != null)
         {

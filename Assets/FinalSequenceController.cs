@@ -23,7 +23,7 @@ public class FinalSequenceController : MonoBehaviour
     [SerializeField] private float rumbleFadeOut = 1f;
 
     [Header("Spin")]
-    [SerializeField] private float spinDuration = 36f;
+    [SerializeField] private float spinDuration = 46f;
     [SerializeField] private float maxSpinSpeed = 220f;
     [SerializeField] private AnimationCurve spinSpeedCurve = new AnimationCurve(
         new Keyframe(0f, 0f),

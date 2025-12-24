@@ -6,6 +6,9 @@ public class DoorHingeGrabber : MonoBehaviour
     [SerializeField] private Transform doorRoot;
     [SerializeField] private Transform hinge;
     [SerializeField] private Vector3 hingeAxis = Vector3.up;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip openSound;
+    [SerializeField] private float openSoundAngle = 20f;
 
     private XRGrabInteractable grabInteractable;
     private Transform interactorAttachTransform;
@@ -15,6 +18,7 @@ public class DoorHingeGrabber : MonoBehaviour
     private Vector3 startHingePosition;
     private Vector3 startHingeAxis;
     private bool isGrabbed;
+    private bool hasPlayedOpenSound;
 
     private void Awake()
     {
@@ -22,6 +26,15 @@ public class DoorHingeGrabber : MonoBehaviour
         if (doorRoot == null)
         {
             doorRoot = transform;
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         }
     }
 
@@ -54,6 +67,12 @@ public class DoorHingeGrabber : MonoBehaviour
         Quaternion deltaRotation = Quaternion.AngleAxis(angle, startHingeAxis);
         doorRoot.rotation = deltaRotation * startDoorRotation;
         doorRoot.position = startHingePosition + deltaRotation * (startDoorPosition - startHingePosition);
+
+        if (!hasPlayedOpenSound && Mathf.Abs(angle) >= openSoundAngle)
+        {
+            PlayOpenSound();
+            hasPlayedOpenSound = true;
+        }
     }
 
     private void HandleSelectEntered(SelectEnterEventArgs args)
@@ -75,12 +94,23 @@ public class DoorHingeGrabber : MonoBehaviour
         startDoorRotation = doorRoot.rotation;
         startDoorPosition = doorRoot.position;
         isGrabbed = true;
+        hasPlayedOpenSound = false;
     }
 
     private void HandleSelectExited(SelectExitEventArgs args)
     {
         isGrabbed = false;
         interactorAttachTransform = null;
+    }
+
+    private void PlayOpenSound()
+    {
+        if (audioSource == null || openSound == null)
+        {
+            return;
+        }
+
+        audioSource.PlayOneShot(openSound);
     }
 
     private static Vector3 ProjectOnPlane(Vector3 vector, Vector3 normal)

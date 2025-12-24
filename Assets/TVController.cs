@@ -9,12 +9,16 @@ public class TVController : MonoBehaviour
     [SerializeField] private Renderer screenRenderer;
     [SerializeField] private FinalSequenceController finalSequence;
     [SerializeField] private bool triggerFinalSequenceOnPowerOn = true;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip staticSound;
+    [SerializeField] private float staticVolume = 0.8f;
 
     private bool isOn = false;
     private bool finalSequenceTriggered;
     private Material instanceMaterial;
     private Material offMaterial;
     private XRBaseInteractable xrInteractable;
+    private bool staticPlayed;
 
     void Start()
     {
@@ -61,6 +65,15 @@ public class TVController : MonoBehaviour
         {
             finalSequence = FindObjectOfType<FinalSequenceController>();
         }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
     }
 
     private void OnEnable()
@@ -88,6 +101,11 @@ public class TVController : MonoBehaviour
     {
         isOn = !isOn;
         ApplyState(isOn);
+        if (isOn && !staticPlayed)
+        {
+            staticPlayed = true;
+            PlayStaticSound();
+        }
         if (isOn && triggerFinalSequenceOnPowerOn && !finalSequenceTriggered)
         {
             finalSequenceTriggered = true;
@@ -96,6 +114,16 @@ public class TVController : MonoBehaviour
                 finalSequence.StartFinalSequence();
             }
         }
+    }
+
+    private void PlayStaticSound()
+    {
+        if (audioSource == null || staticSound == null)
+        {
+            return;
+        }
+
+        audioSource.PlayOneShot(staticSound, staticVolume);
     }
 
     private void ApplyState(bool enabled)
