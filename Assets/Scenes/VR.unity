@@ -4332,6 +4332,8 @@ MonoBehaviour:
   playerCamera: {fileID: 1876219413}
   interactDistance: 3
   screenRenderer: {fileID: 961419753}
+  finalSequence: {fileID: 0}
+  triggerFinalSequenceOnPowerOn: 1
 --- !u!1 &961574453
 GameObject:
   m_ObjectHideFlags: 0
@@ -10395,6 +10397,106 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 0.05, z: 3.5}
   m_Center: {x: 0, y: 0.13, z: 0}
+--- !u!1 &9000000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9000000001}
+  - component: {fileID: 9000000002}
+  m_Layer: 0
+  m_Name: FinalSequenceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9000000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb73d6bb653748bd99b4f1bce0375808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tvController: {fileID: 961419755}
+  targetCamera: {fileID: 1876219413}
+  spinPivot: {fileID: 1876219411}
+  spinRoots:
+  - {fileID: 2444711016771332590}
+  disableBehaviours:
+  - {fileID: 1876219415}
+  - {fileID: 1821494479}
+  disableObjects: []
+  lowRumbleClip: {fileID: 8300000, guid: c8ae7e73a94f2bb45ba414a5013e0895, type: 3}
+  audioSource: {fileID: 0}
+  rumbleVolume: 0.7
+  rumbleFadeIn: 1.5
+  rumbleFadeOut: 1
+  spinDuration: 6
+  maxSpinSpeed: 160
+  spinSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  chromaticIntensity: 1
+  vignetteIntensity: 0.45
+  lensDistortionIntensity: -0.45
+  flashFadeIn: 0.15
+  flashHold: 0.1
+  flashFadeOut: 0.2
+  hospitalTexture: {fileID: 2800000, guid: 3b2e66c140a04d40185dcff9ee89e33e, type: 3}
 --- !u!1 &50754953813220482
 GameObject:
   m_ObjectHideFlags: 0
@@ -10988,7 +11090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652686424135}
   m_Layer: 0
-  m_Name: "\u043A\u043E\u043C\u043D\u0430\u0442\u0430 "
+  m_Name: second_room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17242,6 +17344,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2444711016771332590}
+  - {fileID: 9000000001}
   - {fileID: 768515986}
   - {fileID: 1821494483}
   - {fileID: 364152109}

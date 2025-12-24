@@ -7,8 +7,11 @@ public class TVController : MonoBehaviour
     public Camera playerCamera; // Камера персонажа
     public float interactDistance = 3f; // Максимальная дистанция для взаимодействия
     [SerializeField] private Renderer screenRenderer;
+    [SerializeField] private FinalSequenceController finalSequence;
+    [SerializeField] private bool triggerFinalSequenceOnPowerOn = true;
 
     private bool isOn = false;
+    private bool finalSequenceTriggered;
     private Material instanceMaterial;
     private Material offMaterial;
     private XRBaseInteractable xrInteractable;
@@ -54,6 +57,10 @@ public class TVController : MonoBehaviour
     private void Awake()
     {
         xrInteractable = GetComponent<XRBaseInteractable>();
+        if (finalSequence == null)
+        {
+            finalSequence = FindObjectOfType<FinalSequenceController>();
+        }
     }
 
     private void OnEnable()
@@ -81,6 +88,14 @@ public class TVController : MonoBehaviour
     {
         isOn = !isOn;
         ApplyState(isOn);
+        if (isOn && triggerFinalSequenceOnPowerOn && !finalSequenceTriggered)
+        {
+            finalSequenceTriggered = true;
+            if (finalSequence != null)
+            {
+                finalSequence.StartFinalSequence();
+            }
+        }
     }
 
     private void ApplyState(bool enabled)
