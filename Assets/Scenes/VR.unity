@@ -2702,6 +2702,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5e0c1dbd30311608b04303fd8811b5d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 983000001}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5e0c1dbd30311608b04303fd8811b5d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 986000001}
   m_SourcePrefab: {fileID: 100100000, guid: e5e0c1dbd30311608b04303fd8811b5d, type: 3}
 --- !u!1 &674233518
 GameObject:
@@ -5021,6 +5024,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRigidbody: {fileID: 980000002}
   enableGravityOnRelease: 1
+--- !u!114 &986000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e87d230a9f54c0a8c437f42dc9c79c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleObjects:
+  - {fileID: 5619302608740338207}
+  - {fileID: 4811171726908079928}
+  unlockDelaySeconds: 2
+  enabledLayer: 7
+  disabledLayer: 6
 --- !u!114 &984000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13195,7 +13216,7 @@ GameObject:
   - component: {fileID: 1505466025597546110}
   - component: {fileID: 2402056061685030927}
   - component: {fileID: 8575726444774888389}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: HandleDoor2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13791,7 +13812,7 @@ GameObject:
   - component: {fileID: 7824831988417669273}
   - component: {fileID: 2334830645573757506}
   - component: {fileID: 8548493475417035961}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: HandleDoor1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
