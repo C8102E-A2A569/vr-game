@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FinalSequenceController : MonoBehaviour
@@ -14,6 +15,7 @@ public class FinalSequenceController : MonoBehaviour
     [SerializeField] private Transform[] spinRoots;
     [SerializeField] private Behaviour[] disableBehaviours;
     [SerializeField] private GameObject[] disableObjects;
+    [SerializeField] private GameObject[] hideOnSequenceStart;
 
     [Header("Audio")]
     [SerializeField] private AudioClip lowRumbleClip;
@@ -23,11 +25,11 @@ public class FinalSequenceController : MonoBehaviour
     [SerializeField] private float rumbleFadeOut = 1f;
 
     [Header("Spin")]
-    [SerializeField] private float spinDuration = 46f;
+    [SerializeField] private float spinDuration = 11.5f;
     [SerializeField] private float maxSpinSpeed = 220f;
     [SerializeField] private AnimationCurve spinSpeedCurve = new AnimationCurve(
         new Keyframe(0f, 0f),
-        new Keyframe(0.6f, 0.6f),
+        new Keyframe(0.2f, 0.6f),
         new Keyframe(1f, 1f)
     );
 
@@ -41,15 +43,14 @@ public class FinalSequenceController : MonoBehaviour
     [SerializeField] private float flashHold = 1.25f;
     [SerializeField] private float flashFadeOut = 2.25f;
 
-    [Header("Hospital")]
-    [SerializeField] private Texture2D hospitalTexture;
+    [Header("Scene")]
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     private Volume volume;
     private ChromaticAberration chromatic;
     private Vignette vignette;
     private LensDistortion lensDistortion;
     private Image flashImage;
-    private RawImage hospitalImage;
     private bool hasStarted;
 
     private void Awake()
@@ -94,6 +95,7 @@ public class FinalSequenceController : MonoBehaviour
         }
 
         hasStarted = true;
+        HideSequenceObjects();
         DisablePlayerControls();
         StartCoroutine(SequenceRoutine());
     }
@@ -157,17 +159,30 @@ public class FinalSequenceController : MonoBehaviour
 
         yield return FlashRoutine();
 
-        if (hospitalImage != null)
-        {
-            SetImageAlpha(hospitalImage, 1f);
-        }
-
         if (audioSource != null && lowRumbleClip != null)
         {
             StartCoroutine(FadeOutAudio());
         }
 
         UpdatePostProcessing(0f);
+        SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+    private void HideSequenceObjects()
+    {
+        if (hideOnSequenceStart == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < hideOnSequenceStart.Length; i++)
+        {
+            GameObject target = hideOnSequenceStart[i];
+            if (target != null)
+            {
+                target.SetActive(false);
+            }
+        }
     }
 
     private IEnumerator FlashRoutine()
@@ -192,16 +207,7 @@ public class FinalSequenceController : MonoBehaviour
             yield return new WaitForSeconds(flashHold);
         }
 
-        elapsed = 0f;
-        while (elapsed < flashFadeOut)
-        {
-            float alpha = flashFadeOut <= 0f ? 0f : 1f - (elapsed / flashFadeOut);
-            SetImageAlpha(flashImage, alpha);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        SetImageAlpha(flashImage, 0f);
+        SetImageAlpha(flashImage, 1f);
     }
 
     private IEnumerator FadeOutAudio()
@@ -291,7 +297,7 @@ public class FinalSequenceController : MonoBehaviour
 
     private void EnsureOverlay()
     {
-        if (flashImage != null && hospitalImage != null)
+        if (flashImage != null)
         {
             return;
         }
@@ -303,14 +309,6 @@ public class FinalSequenceController : MonoBehaviour
         canvas.sortingOrder = 999;
         canvasObject.AddComponent<CanvasScaler>();
         canvasObject.AddComponent<GraphicRaycaster>();
-
-        GameObject hospitalObject = new GameObject("HospitalImage");
-        hospitalObject.transform.SetParent(canvasObject.transform, false);
-        hospitalImage = hospitalObject.AddComponent<RawImage>();
-        hospitalImage.raycastTarget = false;
-        hospitalImage.texture = hospitalTexture;
-        SetImageAlpha(hospitalImage, 0f);
-        StretchToFullScreen(hospitalObject.GetComponent<RectTransform>());
 
         GameObject flashObject = new GameObject("Flash");
         flashObject.transform.SetParent(canvasObject.transform, false);

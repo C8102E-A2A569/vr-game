@@ -15,10 +15,35 @@ public class InventoryUI : MonoBehaviour
 
     public InventorySlot[] slots;
 
-    // Добавляем предмет по иконке
+    private void Start()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            InventorySlot slot = slots[i];
+            if (slot == null)
+            {
+                continue;
+            }
+
+            slot.count = 0;
+            slot.currentItem = null;
+
+            if (slot.icon != null)
+            {
+                slot.icon.enabled = false;
+            }
+
+            if (slot.countText != null)
+            {
+                slot.countText.text = string.Empty;
+            }
+        }
+    }
+
+    // Р”РѕР±Р°РІР»СЏРµРј РїСЂРµРґРјРµС‚ РїРѕ РёРєРѕРЅРєРµ
     public bool AddItem(Sprite itemIcon)
     {
-        // Ищем, есть ли уже такой предмет в инвентаре
+        // РС‰РµРј, РµСЃС‚СЊ Р»Рё СѓР¶Рµ С‚Р°РєРѕР№ РїСЂРµРґРјРµС‚ РІ РёРЅРІРµРЅС‚Р°СЂРµ
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].currentItem == itemIcon)
@@ -29,7 +54,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        // Если такого нет — ищем пустой слот
+        // Р•СЃР»Рё С‚Р°РєРѕРіРѕ РЅРµС‚ вЂ” РёС‰РµРј РїСѓСЃС‚РѕР№ СЃР»РѕС‚
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].currentItem == null)
@@ -43,7 +68,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        // Свободных слотов нет
+        // РЎРІРѕР±РѕРґРЅС‹С… СЃР»РѕС‚РѕРІ РЅРµС‚
         return false;
     }
 }
