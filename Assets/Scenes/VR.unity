@@ -213,7 +213,7 @@ RectTransform:
   m_GameObject: {fileID: 3564921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 847286622}
@@ -1362,7 +1362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9183,6 +9183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   topColor: {r: 0.9, g: 0.66, b: 0.82, a: 1}
   bottomColor: {r: 0.16, g: 0.2, b: 0.32, a: 1}
+  midColor: {r: 0.34, g: 0.78, b: 0.52, a: 1}
+  midPoint: 0.36
   textureHeight: 256
   exposure: 1
   applyOnStart: 1
@@ -9385,6 +9387,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 202364687, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670256624, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1680501587, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.7
@@ -9403,6 +9413,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 393207239731357619, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1178791450436251564, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -9468,6 +9482,18 @@ PrefabInstance:
     - target: {fileID: 2434299456458490401, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_InteractionLayers.m_Bits
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2633365042866799530, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2766569358201078490, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563199296126487199, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6045481230268494804, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_PhysicsLayerMask.m_Bits
@@ -10514,6 +10540,14 @@ MonoBehaviour:
   - {fileID: 1876219415}
   - {fileID: 1821494479}
   disableObjects: []
+  hideOnSequenceStart:
+  - {fileID: 1149445360}
+  - {fileID: 1789663423}
+  - {fileID: 769219809}
+  - {fileID: 982000001}
+  - {fileID: 981000001}
+  - {fileID: 980000001}
+  - {fileID: 2090000001}
   lowRumbleClip: {fileID: 8300000, guid: c8ae7e73a94f2bb45ba414a5013e0895, type: 3}
   audioSource: {fileID: 0}
   rumbleVolume: 0.7
@@ -10561,14 +10595,6 @@ MonoBehaviour:
   flashHold: 1.25
   flashFadeOut: 0
   mainMenuSceneName: MainMenu
-  hideOnSequenceStart:
-  - {fileID: 1149445360}
-  - {fileID: 1789663423}
-  - {fileID: 769219809}
-  - {fileID: 982000001}
-  - {fileID: 981000001}
-  - {fileID: 980000001}
-  - {fileID: 2090000001}
 --- !u!114 &9000000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
